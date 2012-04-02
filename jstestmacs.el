@@ -71,13 +71,11 @@
 (defun jste-dwim ()
   (interactive)
   (jste-decide-conf-directory)
+  (when (null jste-driver-dir)
+    (jste-query :driverDir))
   (when (or (null jste-test-name) current-prefix-arg)
-    (jste-set-testname))
+    (jste-query :testName))
   (jste-send-current-test))
-
-(defun jste-set-testname ()
-  (interactive)
-  (jste-query))
 
 (defun jste-decide-conf-directory ()
   (interactive)
@@ -91,15 +89,20 @@
                 jsTestConf
                 (concat (funcall to-string dir-name) "/jsTestDriver.conf"))
           (if (file-exists-p jsTestConf)
-              (return (setq jste-driver-dir (or jste-driver-dir (funcall to-string dir-name))
-                            jste-config-path jsTestConf))))))
+              (return (setq jste-config-path jsTestConf))))))
 
 (defun jste-pop (list)
   (reverse (cdr (reverse list))))
 
-(defun jste-query (&optional message)
-  (let* ((input (read-string (or message "test name here: "))))
-    (setq jste-test-name input)))
+(defun jste-from-symbol-to-string (symbol)
+  (replace-regexp-in-string ":" "" (symbol-name symbol)))
+
+(defun jste-query (&optional type)
+  (let* ((header (jste-from-symbol-to-string type))
+         (input (read-string (concat header " here: "))))
+    (case type
+      (:driverDir (setq jste-driver-dir input))
+      (:testName (setq jste-test-name input)))))
 
 (defun jste-send-current-test ()
   (interactive)
