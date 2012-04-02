@@ -83,13 +83,15 @@
       ((file-name (split-string buffer-file-truename "/"))
        (dir-name file-name)
        (to-string '(lambda (name) (mapconcat 'identity name "/")))
-       jsTestConf)
+       (jsteConcatConfPath '(lambda (directorys)
+                          (concat (mapconcat 'identity directorys "/")
+                                  "/jsTestDriver.conf")))
+       jsTestConfPath)
     (loop repeat (length dir-name) do
           (setq dir-name (jste-pop dir-name)
-                jsTestConf
-                (concat (funcall to-string dir-name) "/jsTestDriver.conf"))
-          (if (file-exists-p jsTestConf)
-              (return (setq jste-config-path jsTestConf))))))
+                jsTestConfPath (funcall jsteConcatConfPath dir-name))
+          (if (file-exists-p jsTestConfPath)
+              (return (setq jste-config-path jsTestConfPath))))))
 
 (defun jste-pop (list)
   (reverse (cdr (reverse list))))
