@@ -30,7 +30,7 @@
 ;; (require 'jstestmacs)
 ;; (setq jste-driver-dir "path/to/JsTestDriver.jar")
 ;; (add-hook 'js2-mode-hook
-;;           '(lambda () 
+;;           '(lambda ()
 ;;              (local-set-key "\C-ct" 'jste-dwim)))
 ;;
 ;; types M-x jste-dwim, it's command that execute current file
