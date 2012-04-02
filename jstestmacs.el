@@ -71,7 +71,7 @@
 (defun jste-dwim ()
   (interactive)
   (jste-decide-conf-directory)
-  (when current-prefix-arg
+  (when (or (null jste-test-name) current-prefix-arg)
     (jste-set-testname))
   (jste-send-current-test))
 
