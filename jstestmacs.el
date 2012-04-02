@@ -94,8 +94,8 @@
               (return (setq jste-driver-dir (or jste-driver-dir (funcall to-string dir-name))
                             jste-config-path jsTestConf))))))
 
-(defun jste-pop (rist)
-  (reverse (cdr (reverse rist))))
+(defun jste-pop (list)
+  (reverse (cdr (reverse list))))
 
 (defun jste-query (&optional message)
   (let* ((input (read-string (or message "test name here: "))))
