@@ -114,14 +114,16 @@
          testname command result)
     (string-match "^test-\\([a-zA-Z-]+\\)\\.js$" filename)
     (setq testname (or jste-test-name (match-string 1 filename))
-          command
-          (concat "\\cd " jste-driver-dir
-                  "; java -jar JsTestDriver.jar --tests "
-                  testname " --verbose --captureConsole --config "
-                  jste-config-path)
-          result (shell-command-to-string command))
+          result (jste-fetch-result jste-driver-dir testname))
     (jste-make-buffer result)
     (jste-control-command)))
+
+(defun jste-fetch-result (driver-dir test-name)
+  (shell-command-to-string
+   (concat "\\cd " driver-dir
+           "; java -jar JsTestDriver.jar --tests "
+           test-name " --verbose --captureConsole --config "
+           jste-config-path)))
 
 (defun jste-make-buffer(content)
   (let* ((basebuffer (current-buffer)))
