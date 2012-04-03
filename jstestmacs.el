@@ -107,7 +107,6 @@
       (:testName (setq jste-test-name input)))))
 
 (defun jste-send-current-test ()
-  (interactive)
   (let* ((to-string '(lambda (name) (mapconcat 'identity name "")))
          (filename (funcall to-string (last
                                        (split-string buffer-file-truename "/"))))
