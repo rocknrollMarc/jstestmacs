@@ -84,8 +84,8 @@
        (dir-name file-name)
        (to-string '(lambda (name) (mapconcat 'identity name "/")))
        (assign-config-path '(lambda (directorys)
-                            (concat (mapconcat 'identity directorys "/")
-                                    "/jsTestDriver.conf")))
+                              (concat (mapconcat 'identity directorys "/")
+                                      "/jsTestDriver.conf")))
        jsTestConfPath)
     (loop repeat (length dir-name) do
           (setq dir-name (jste-pop dir-name)
