@@ -80,18 +80,16 @@
 (defun jste-decide-conf-directory ()
   (interactive)
   (let*
-      ((file-name (split-string buffer-file-truename "/"))
-       (dir-name file-name)
-       (to-string '(lambda (name) (mapconcat 'identity name "/")))
-       (assign-config-path '(lambda (directorys)
-                              (concat (mapconcat 'identity directorys "/")
-                                      "/jsTestDriver.conf")))
+      ((dir-names (split-string buffer-file-truename "/"))
        jsTestConfPath)
-    (loop repeat (length dir-name) do
-          (setq dir-name (jste-pop dir-name)
-                jsTestConfPath (funcall assign-config-path dir-name))
+    (loop repeat (length dir-names) do
+          (setq dir-names (jste-pop dir-names)
+                jsTestConfPath (jste-make-config-path dir-names))
           (if (file-exists-p jsTestConfPath)
               (return jsTestConfPath)))))
+
+(defun jste-make-config-path (directorys)
+  (concat (mapconcat 'identity directorys "/") "/jsTestDriver.conf"))
 
 (defun jste-pop (list)
   (reverse (cdr (reverse list))))
