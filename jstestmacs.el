@@ -107,15 +107,17 @@
       (:testName (setq jste-test-name input)))))
 
 (defun jste-send-current-test ()
-  (let* ((to-string '(lambda (name) (mapconcat 'identity name "")))
-         (file-name (funcall to-string (last
-                                       (split-string buffer-file-truename "/"))))
+  (let* ((file-name (jste-current-file-name))
          test-name result)
     (string-match "^test-\\([a-zA-Z-]+\\)\\.js$" file-name)
     (setq test-name (or jste-test-name (match-string 1 file-name))
           result (jste-fetch-result jste-driver-dir test-name))
     (jste-make-buffer result)
     (jste-control-command)))
+
+(defun jste-current-file-name ()
+  (let* ((split-dir-and-file-names (split-string buffer-file-truename "/")))
+    (mapconcat 'identity (last split-dir-and-file-names) "")))
 
 (defun jste-fetch-result (driver-dir test-name)
   (shell-command-to-string
