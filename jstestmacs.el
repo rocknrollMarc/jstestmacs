@@ -120,7 +120,6 @@
                   testname " --verbose --captureConsole --config "
                   jste-config-path)
           result (shell-command-to-string command))
-    (message testname)
     (jste-make-buffer result)
     (jste-control-command)))
 
