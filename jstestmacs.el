@@ -81,12 +81,12 @@
   (interactive)
   (let*
       ((dir-names (split-string buffer-file-truename "/"))
-       jsTestConfPath)
+       config-path)
     (loop repeat (length dir-names) do
           (setq dir-names (jste-pop dir-names)
-                jsTestConfPath (jste-make-config-path dir-names))
-          (if (file-exists-p jsTestConfPath)
-              (return jsTestConfPath)))))
+                config-path (jste-make-config-path dir-names))
+          (if (file-exists-p config-path)
+              (return config-path)))))
 
 (defun jste-make-config-path (directorys)
   (concat (mapconcat 'identity directorys "/") "/jsTestDriver.conf"))
