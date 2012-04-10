@@ -122,7 +122,7 @@
    (concat "\\cd " driver-dir
            "; java -jar JsTestDriver.jar --tests "
            test-name " --verbose --captureConsole --config "
-           jste-config-path)))
+           jste-config-path " --reset")))
 
 (defun jste-make-buffer(content)
   (let* ((basebuffer (current-buffer)))
