@@ -136,7 +136,8 @@
 
 (defun jste-driver-live-p ()
   (let ((result (shell-command-to-string
-                 "ps -fUyut --forest | grep JsTestDriver")))
+                 (concat "\\ps -fUyut --forest | grep JsTestDriver || "
+                         "\\ps -fUck --forest | grep JsTestDriver"))))
     (if (string-match "java -jar JsTestDriver" result)
         t
       nil)))
