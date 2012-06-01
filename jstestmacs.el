@@ -81,10 +81,10 @@
 
 (defun jste-boot-driver ()
   (let* ((command (concat
-                   "\\cd " jste-driver-dir
+                   "\\cd " jste-driver-dir ";"
                    "java -jar JsTestDriver.jar --port 9876 "
-                          "--captureConsole --browser "
-                          "iceweasel &")))
+                   "--captureConsole --browser "
+                   "iceweasel &")))
     (shell-command command)))
 
 (defun jste-decide-conf-directory ()
