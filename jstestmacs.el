@@ -68,6 +68,23 @@
     (:down (scroll-other-window-down 1)))
   (jste-control-command))
 
+(defun jste-driver-live-p ()
+  (let ((result (shell-command-to-string
+                 (concat "\\ps -fUyut --forest | grep JsTestDriver || "
+                         "\\ps -fUck --forest | grep JsTestDriver"))))
+    (if (string-match "java -jar JsTestDriver" result)
+        t
+      nil)))
+
+(defun jste-boot-driver ()
+  (let* ((command (concat
+                   "\\cd " jste-driver-dir ";"
+                   "java -jar JsTestDriver.jar --port 9876 "
+                   "--captureConsole --browser "
+                   "iceweasel &")))
+    (shell-command command)
+    (sleep-for 3)))
+
 (defun jste-dwim ()
   (interactive)
   (setq jste-config-path (jste-decide-conf-directory))
@@ -78,14 +95,6 @@
   (when (or (null jste-test-name) current-prefix-arg)
     (jste-query :testName))
   (jste-send-current-test))
-
-(defun jste-boot-driver ()
-  (let* ((command (concat
-                   "\\cd " jste-driver-dir ";"
-                   "java -jar JsTestDriver.jar --port 9876 "
-                   "--captureConsole --browser "
-                   "iceweasel &")))
-    (shell-command command)))
 
 (defun jste-decide-conf-directory ()
   (interactive)
@@ -133,14 +142,6 @@
            "; java -jar JsTestDriver.jar --tests "
            test-name " --verbose --captureConsole --config "
            jste-config-path " --reset")))
-
-(defun jste-driver-live-p ()
-  (let ((result (shell-command-to-string
-                 (concat "\\ps -fUyut --forest | grep JsTestDriver || "
-                         "\\ps -fUck --forest | grep JsTestDriver"))))
-    (if (string-match "java -jar JsTestDriver" result)
-        t
-      nil)))
 
 (defun jste-make-buffer(content)
   (let* ((basebuffer (current-buffer)))
