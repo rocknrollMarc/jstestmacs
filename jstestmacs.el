@@ -41,6 +41,11 @@
 (eval-when-compile
   (require 'cl))
 
+(defcustom jste-test-browser "firefox"
+  "assign your browser"
+  :group 'jstestmacs
+  :type 'string)
+
 (defvar jste-driver-dir nil)
 (defvar jste-test-name nil)
 (defvar jste-config-path nil)
@@ -80,7 +85,7 @@
                    "\\cd " jste-driver-dir ";"
                    "java -jar JsTestDriver.jar --port 9876 "
                    "--captureConsole --browser "
-                   "iceweasel &")))
+                   jste-test-browser " &")))
     (shell-command command)
     (sleep-for 3)))
 
