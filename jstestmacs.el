@@ -67,8 +67,8 @@
     (:quit
      (kill-buffer jste-output-buffer))))
 
-(defun jste-scroll-other-window (ctrl)
-  (case ctrl
+(defun jste-scroll-other-window (manipulation)
+  (case manipulation
     (:up (scroll-other-window 1))
     (:down (scroll-other-window-down 1)))
   (jste-control-command))
