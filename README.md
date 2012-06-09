@@ -2,17 +2,18 @@
 this program is frontend for JsTestDriver, it can be that execute test simply from Emacs.
 
 # Usage
-shell: execute below command line
-% java -jar JsTestDriver.jar --port 9876 --captureConsole --browser firefox
 
-    emacs: put below configuration to your .emacs
+Before setup your .emacs, set below:
+
     (add-to-list 'load-path "path/to/jstestmacs")
+    (setq jstestmacs-driver-dir "~/directory where there are JsTestDriver.jar/"
+          jstestmacs-test-browser "firefox"
+          jstestmacs--port "9876")
     (require 'jstestmacs)
-    (setq jste-driver-dir "path/to/JsTestDriver.jar")
     (add-hook 'js2-mode-hook
              '(lambda ()
-              (local-set-key "\C-ct" 'jste-dwim)))
+                (local-set-key "\C-ct" 'jstestmacs-dwim)))
 
-types M-x jste-dwim, it's command that execute current file
-note:
-this program require what put jsTestDriver.conf to directory on than the test
+After the end of the preparation, you can execute JsTestDriver with types
+"C-c t" where there are suffix *.js when js2-mode(case with js2-mode by add-hook).
+Of course, require JsTestdriver and browser. :)
