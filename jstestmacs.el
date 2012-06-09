@@ -29,7 +29,7 @@
 ;;; Usage
 ;; Before setup your .emacs, set below:
 ;; (add-to-list 'load-path "path/to/jstestmacs")
-;; (setq jste-driver-dir "~/lib/")
+;; (setq jstestmacs-driver-dir "~/directory where there are JsTestDriver.jar/")
 ;; (require 'jstestmacs)
 ;; (add-hook 'js2-mode-hook
 ;;           '(lambda ()
@@ -37,6 +37,7 @@
 ;;
 ;; After the end of the preparation, you can execute JsTestDriver with push
 ;; "C-c t" when js2-mode.
+;; Of course, require JsTestdriver and browser. :)
 
 (eval-when-compile
   (require 'cl))
