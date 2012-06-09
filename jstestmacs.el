@@ -47,10 +47,16 @@
   :group 'jstestmacs
   :type 'string)
 
+(defcustom jstestmacs-port "9876"
+  "port number"
+  :group 'jstestmacs
+  :type 'string)
+
 (defcustom jstestmacs-driver-dir "~/lib/"
   "set directory where there are JsTestDriver.jar"
   :group 'jstestmacs
   :type 'string)
+
 (defvar jstestmacs-test-name nil)
 (defvar jstestmacs-config-path nil)
 (defvar jstestmacs-output-buffer "*JsTestDriver Output*")
@@ -87,8 +93,9 @@
 (defun jstestmacs-boot-driver ()
   (let* ((command (concat
                    "\\cd " jstestmacs-driver-dir ";"
-                   "java -jar JsTestDriver.jar --port 9876 "
-                   "--captureConsole --browser "
+                   "java -jar JsTestDriver.jar "
+                   "--port " jstestmacs-port
+                   " --captureConsole --browser "
                    jstestmacs-test-browser " &")))
     (shell-command command)
     (sleep-for 3)))
