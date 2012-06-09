@@ -1,5 +1,5 @@
 # Commentary:
-this program is frontend for JsTestDriver, it can be that execute test simply from Emacs.
+This program is frontend for JsTestDriver, it can be that execute test simply from Emacs.
 
 # Usage
 
@@ -17,3 +17,6 @@ Before setup your .emacs, set below:
 After the end of the preparation, you can execute JsTestDriver with types
 "C-c t" where there are suffix *.js when js2-mode(case with js2-mode by add-hook).
 Of course, require JsTestdriver and browser. :)
+
+Note:
+jsTestDriver.conf is detected automatically by recursive traverse directory to above.

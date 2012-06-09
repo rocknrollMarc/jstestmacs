@@ -38,6 +38,9 @@
 ;; After the end of the preparation, you can execute JsTestDriver with push
 ;; "C-c t" when js2-mode.
 ;; Of course, require JsTestdriver and browser. :)
+;; Note:
+;; jsTestDriver.conf is detected automatically by recursive traverse
+;; directory to above.
 
 (eval-when-compile
   (require 'cl))
