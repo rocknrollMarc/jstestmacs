@@ -2,10 +2,13 @@
 
 ;; Copyright (C) 2012 by Yuta Yamada
 
-;; Author: Yuta Yamada <yamada@clear-code.com>
-;; Version: 0.0.1
+;; Author: Yuta Yamada <cokesboy@gmail.com>
+;; URL: https://github.com/yuutayamada/jstestmacs
+;; Version: 0.3.0
+;; Package-Requires:  ((popwin "20120529"))
+;; Keywords: test, javascript
 
-;;; Licence:
+;;; License:
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -20,23 +23,20 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; this program is frontend for JsTestDriver, execute test simply from Emacs.
+;; This program is frontend for JsTestDriver, It can be execute test
+;; simply from Emacs.
 
-;;;Usage
-;; execute below command line
-;; % java -jar JsTestDriver.jar --port 9876 --captureConsole --browser firefox
-;; put below configuration to your .emacs
+;;; Usage
+;; Before setup your .emacs, set below:
 ;; (add-to-list 'load-path "path/to/jstestmacs")
+;; (setq jste-driver-dir "~/lib/")
 ;; (require 'jstestmacs)
-;; (setq jste-driver-dir "path/to/JsTestDriver.jar")
 ;; (add-hook 'js2-mode-hook
 ;;           '(lambda ()
 ;;              (local-set-key "\C-ct" 'jste-dwim)))
 ;;
-;; types M-x jste-dwim, it's command that execute current file
-;;
-;; note:
-;; It is necessary to put jsTestDriver.conf in directory on the test than
+;; After the end of the preparation, you can execute JsTestDriver with push
+;; "C-c t" when js2-mode.
 
 (eval-when-compile
   (require 'cl))
@@ -162,3 +162,5 @@
      (t (pop-to-buffer (get-buffer-create jste-output-buffer))))))
 
 (provide 'jstestmacs)
+
+;;; jstestmacs.el ends here
