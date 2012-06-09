@@ -47,7 +47,10 @@
   :group 'jstestmacs
   :type 'string)
 
-(defvar jstestmacs-driver-dir nil)
+(defcustom jstestmacs-driver-dir "~/lib/"
+  "set directory where there are JsTestDriver.jar"
+  :group 'jstestmacs
+  :type 'string)
 (defvar jstestmacs-test-name nil)
 (defvar jstestmacs-config-path nil)
 (defvar jstestmacs-output-buffer "*JsTestDriver Output*")
