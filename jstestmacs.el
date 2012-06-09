@@ -33,7 +33,7 @@
 ;; (require 'jstestmacs)
 ;; (add-hook 'js2-mode-hook
 ;;           '(lambda ()
-;;              (local-set-key "\C-ct" 'jste-dwim)))
+;;              (local-set-key "\C-ct" 'jstestmacs-dwim)))
 ;;
 ;; After the end of the preparation, you can execute JsTestDriver with push
 ;; "C-c t" when js2-mode.
@@ -41,116 +41,116 @@
 (eval-when-compile
   (require 'cl))
 
-(defcustom jste-test-browser "firefox"
+(defcustom jstestmacs-test-browser "firefox"
   "assign your browser"
   :group 'jstestmacs
   :type 'string)
 
-(defvar jste-driver-dir nil)
-(defvar jste-test-name nil)
-(defvar jste-config-path nil)
-(defvar jste-output-buffer "*JsTestDriver Output*")
+(defvar jstestmacs-driver-dir nil)
+(defvar jstestmacs-test-name nil)
+(defvar jstestmacs-config-path nil)
+(defvar jstestmacs-output-buffer "*JsTestDriver Output*")
 
-(defvar jste-command-alist
+(defvar jstestmacs-command-alist
   '((?q . :quit)
     (?n . :next-line)
     (?p . :previous-line)))
 
-(defun jste-control-command ()
-  (setq other-window-scroll-buffer jste-output-buffer)
+(defun jstestmacs-control-command ()
+  (setq other-window-scroll-buffer jstestmacs-output-buffer)
   (read-event)
-  (case (assoc-default last-input-event jste-command-alist)
+  (case (assoc-default last-input-event jstestmacs-command-alist)
     (:next-line
-     (jste-scroll-other-window :up))
+     (jstestmacs-scroll-other-window :up))
     (:previous-line
-     (jste-scroll-other-window :down))
+     (jstestmacs-scroll-other-window :down))
     (:quit
-     (kill-buffer jste-output-buffer))))
+     (kill-buffer jstestmacs-output-buffer))))
 
-(defun jste-scroll-other-window (manipulation)
+(defun jstestmacs-scroll-other-window (manipulation)
   (case manipulation
     (:up (scroll-other-window 1))
     (:down (scroll-other-window-down 1)))
-  (jste-control-command))
+  (jstestmacs-control-command))
 
-(defun jste-driver-live-p ()
+(defun jstestmacs-driver-live-p ()
   (let ((result (shell-command-to-string
                  "\\ps -fU`whoami` --forest | grep JsTestDriver")))
     (if (string-match "java -jar JsTestDriver" result)
         t
       nil)))
 
-(defun jste-boot-driver ()
+(defun jstestmacs-boot-driver ()
   (let* ((command (concat
-                   "\\cd " jste-driver-dir ";"
+                   "\\cd " jstestmacs-driver-dir ";"
                    "java -jar JsTestDriver.jar --port 9876 "
                    "--captureConsole --browser "
-                   jste-test-browser " &")))
+                   jstestmacs-test-browser " &")))
     (shell-command command)
     (sleep-for 3)))
 
-(defun jste-dwim ()
+(defun jstestmacs-dwim ()
   (interactive)
-  (setq jste-config-path (jste-decide-conf-directory))
-  (when (null jste-driver-dir)
-    (jste-query :driverDir))
-  (unless (jste-driver-live-p)
-    (jste-boot-driver))
-  (when (or (null jste-test-name) current-prefix-arg)
-    (jste-query :testName))
-  (jste-send-current-test))
+  (setq jstestmacs-config-path (jstestmacs-decide-conf-directory))
+  (when (null jstestmacs-driver-dir)
+    (jstestmacs-query :driverDir))
+  (unless (jstestmacs-driver-live-p)
+    (jstestmacs-boot-driver))
+  (when (or (null jstestmacs-test-name) current-prefix-arg)
+    (jstestmacs-query :testName))
+  (jstestmacs-send-current-test))
 
-(defun jste-decide-conf-directory ()
+(defun jstestmacs-decide-conf-directory ()
   (interactive)
   (let*
       ((dir-names (split-string buffer-file-truename "/"))
        config-path)
     (loop repeat (length dir-names) do
-          (setq dir-names (jste-pop dir-names)
-                config-path (jste-make-config-path dir-names))
+          (setq dir-names (jstestmacs-pop dir-names)
+                config-path (jstestmacs-make-config-path dir-names))
           (if (file-exists-p config-path)
               (return config-path)))))
 
-(defun jste-make-config-path (directorys)
+(defun jstestmacs-make-config-path (directorys)
   (concat (mapconcat 'identity directorys "/") "/jsTestDriver.conf"))
 
-(defun jste-pop (list)
+(defun jstestmacs-pop (list)
   (reverse (cdr (reverse list))))
 
-(defun jste-from-symbol-to-string (symbol)
+(defun jstestmacs-from-symbol-to-string (symbol)
   (replace-regexp-in-string ":" "" (symbol-name symbol)))
 
-(defun jste-query (&optional type)
-  (let* ((header (jste-from-symbol-to-string type))
+(defun jstestmacs-query (&optional type)
+  (let* ((header (jstestmacs-from-symbol-to-string type))
          (input (read-string (concat header " here: "))))
     (case type
-      (:driverDir (setq jste-driver-dir input))
-      (:testName (setq jste-test-name input)))))
+      (:driverDir (setq jstestmacs-driver-dir input))
+      (:testName (setq jstestmacs-test-name input)))))
 
-(defun jste-send-current-test ()
-  (let* ((file-name (jste-current-file-name))
+(defun jstestmacs-send-current-test ()
+  (let* ((file-name (jstestmacs-current-file-name))
          test-name result)
     (string-match "^test-\\([a-zA-Z-]+\\)\\.js$" file-name)
-    (setq test-name (or jste-test-name (match-string 1 file-name))
-          result (jste-fetch-result jste-driver-dir test-name))
-    (jste-make-buffer result)
-    (jste-control-command)))
+    (setq test-name (or jstestmacs-test-name (match-string 1 file-name))
+          result (jstestmacs-fetch-result jstestmacs-driver-dir test-name))
+    (jstestmacs-make-buffer result)
+    (jstestmacs-control-command)))
 
-(defun jste-current-file-name ()
+(defun jstestmacs-current-file-name ()
   (let* ((split-dir-and-file-names (split-string buffer-file-truename "/")))
     (mapconcat 'identity (last split-dir-and-file-names) "")))
 
-(defun jste-fetch-result (driver-dir test-name)
+(defun jstestmacs-fetch-result (driver-dir test-name)
   (shell-command-to-string
    (concat "\\cd " driver-dir
            "; java -jar JsTestDriver.jar --tests "
            test-name " --verbose --captureConsole --config "
-           jste-config-path " --reset")))
+           jstestmacs-config-path " --reset")))
 
-(defun jste-make-buffer(content)
+(defun jstestmacs-make-buffer(content)
   (let* ((basebuffer (current-buffer)))
     (with-temp-buffer
-      (switch-to-buffer (get-buffer-create jste-output-buffer))
+      (switch-to-buffer (get-buffer-create jstestmacs-output-buffer))
       (erase-buffer) ;;initialize
       (insert content))
     (switch-to-buffer basebuffer)
@@ -159,7 +159,7 @@
       (popwin:popup-buffer
        (get-buffer-create "*JsTestDriver Output*")
        :noselect t :stick t :height 20 :position :top) t)
-     (t (pop-to-buffer (get-buffer-create jste-output-buffer))))))
+     (t (pop-to-buffer (get-buffer-create jstestmacs-output-buffer))))))
 
 (provide 'jstestmacs)
 
